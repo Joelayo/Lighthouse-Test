@@ -21,7 +21,7 @@ const { URL } = require('url');
         for (let i = 1; i <= 3; i++) {
             console.log(`Running test ${i} for: ${url}`);
             const browser = await puppeteer.launch({ headless: true });
-            const { lhr } = await import('lighthouse')(url, {
+            const { lhr } = await lighthouse(url, {
                 port: (new URL(browser.wsEndpoint())).port,
                 output: 'html',
                 logLevel: 'info',
