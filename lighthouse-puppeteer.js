@@ -1,6 +1,10 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
+import lighthouse from 'lighthouse';
+import { writeFile } from 'fs/promises';
+
+/* const puppeteer = require('puppeteer');
 const lighthouse = require('lighthouse');
-const fs = require('fs');
+const fs = require('fs'); */
 const { URL } = require('url');
 
 (async () => {
