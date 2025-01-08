@@ -1,9 +1,5 @@
-/* import puppeteer from 'puppeteer'; */
-import lighthouse from 'lighthouse';
-/* import { writeFile } from 'fs/promises'; */
-
 const puppeteer = require('puppeteer');
-/* const lighthouse = require('lighthouse'); */
+const lighthouse = require('lighthouse');
 const fs = require('fs');
 const { URL } = require('url');
 
@@ -25,7 +21,7 @@ const { URL } = require('url');
         for (let i = 1; i <= 3; i++) {
             console.log(`Running test ${i} for: ${url}`);
             const browser = await puppeteer.launch({ headless: true });
-            const { lhr } = await lighthouse(url, {
+            const { lhr } = await import('lighthouse')(url, {
                 port: (new URL(browser.wsEndpoint())).port,
                 output: 'html',
                 logLevel: 'info',
