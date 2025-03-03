@@ -19,7 +19,24 @@ const { URL } = require('url');
 
         for (let i = 1; i <= 3; i++) {
             console.log(`Running test ${i} for: ${url}`);
-            const browser = await puppeteer.launch({ headless: true });
+            
+            const browser = await puppeteer.launch({
+                headless: false,  // Set to false to avoid bot detection issues
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-extensions',
+                    '--disable-gpu',
+                ],
+            });
+
+            const page = await browser.newPage();
+
+            // **Set a real User-Agent to bypass bot detection**
+            await page.setUserAgent(
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+            );
 
             // Dynamically import Lighthouse
             const { default: lighthouse } = await import('lighthouse');
