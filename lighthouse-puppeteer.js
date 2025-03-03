@@ -17,7 +17,7 @@ const { URL } = require('url');
         const parsedUrl = new URL(url);
         const hostname = parsedUrl.hostname;
 
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 2; i++) {
             console.log(`Running test ${i} for: ${url}`);
             
             const browser = await puppeteer.launch({
