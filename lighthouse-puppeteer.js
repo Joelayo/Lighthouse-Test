@@ -17,6 +17,10 @@ const { URL } = require('url');
         const parsedUrl = new URL(url);
         const hostname = parsedUrl.hostname;
 
+        // **Sanitize path to use in filenames**
+        let sanitizedPath = parsedUrl.pathname.replace(/[^a-zA-Z0-9]/g, '-'); 
+        if (sanitizedPath.length > 100) sanitizedPath = sanitizedPath.substring(0, 100);
+
         for (let i = 1; i <= 2; i++) {
             console.log(`Running test ${i} for: ${url}`);
             
@@ -47,9 +51,13 @@ const { URL } = require('url');
                 logLevel: 'info',
             });
 
-            // Save report for each test
-            const reportFilename = `report_${hostname}_test${i}_${timestamp}.html`;
+            // **Create a unique filename using sanitized path**
+            const reportFilename = `report_${hostname}${sanitizedPath}_test${i}_${timestamp}.html`;
             const reportHtml = report;
+            
+            // Save report for each test
+            // const reportFilename = `report_${hostname}_test${i}_${timestamp}.html`;
+            // const reportHtml = report;
 
             if (!fs.existsSync('./lighthouse-results')) {
                 fs.mkdirSync('./lighthouse-results');
