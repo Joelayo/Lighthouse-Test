@@ -18,7 +18,7 @@ const { URL } = require('url');
         const hostname = parsedUrl.hostname;
 
         // **Sanitize path to use in filenames**
-        let sanitizedPath = parsedUrl.pathname.replace(/[^a-zA-Z0-9]/g, ''); 
+        let sanitizedPath = parsedUrl.pathname.replace(/[^a-zA-Z0-9]/g, '-'); 
         if (sanitizedPath.length > 100) sanitizedPath = sanitizedPath.substring(0, 100);
 
         for (let i = 1; i <= 2; i++) {
