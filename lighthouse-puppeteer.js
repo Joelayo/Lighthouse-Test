@@ -10,7 +10,7 @@ const { URL } = require('url');
     }
 
     const date = new Date();
-    const timestamp = date.toISOString().replace(/[:.]/g, ''); // Format for filenames
+    const timestamp = date.toISOString().replace(/[:.]/g, '-'); // Format for filenames
 
     for (const url of urls) {
         console.log(`Starting tests for: ${url}`);
@@ -52,7 +52,7 @@ const { URL } = require('url');
             });
 
             // **Create a unique filename using sanitized path**
-            const reportFilename = `report_${hostname}_${sanitizedPath}_test${i}_${timestamp}.html`;
+            const reportFilename = `report_${hostname}${sanitizedPath}_test${i}_${timestamp}.html`;
             const reportHtml = report;
             
             // Save report for each test
