@@ -19,51 +19,6 @@ New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
 $ProgressPreference = 'SilentlyContinue'
 $webClient = New-Object System.Net.WebClient
 
-# Install Visual Studio 2022 Community
-Write-Host "Starting Visual Studio 2022 Community installation process..." -ForegroundColor Cyan
-"Starting Visual Studio 2022 Community installation at $(Get-Date)" | Out-File -FilePath $logFile -Append
-
-$vsInstallerPath = "$tempDir\vs_community.exe"
-$vsDownloadUrl = "https://aka.ms/vs/17/release/vs_community.exe"
-Write-Host "Downloading Visual Studio 2022 Community installer..." -ForegroundColor Cyan
-
-try {
-    $webClient.DownloadFile($vsDownloadUrl, $vsInstallerPath)
-    "Visual Studio installer downloaded successfully at $(Get-Date)" | Out-File -FilePath $logFile -Append
-} 
-catch {
-    $errorMessage = "Failed to download Visual Studio installer: $_"
-    Write-Host $errorMessage -ForegroundColor Red
-    $errorMessage | Out-File -FilePath $logFile -Append
-    exit 1
-}
-
-Write-Host "Installing Visual Studio 2022 Community with requested workloads..." -ForegroundColor Yellow
-Write-Host "This may take some time. Please wait..." -ForegroundColor Yellow
-
-try {
-    Start-Process -FilePath $vsInstallerPath -ArgumentList "--quiet", "--norestart", "--wait", `
-                                                        "--add Microsoft.VisualStudio.Workload.NetWeb", `
-                                                        "--add Microsoft.VisualStudio.Workload.Node", `
-                                                        "--add Microsoft.VisualStudio.Workload.ManagedDesktop", `
-                                                        "--add Microsoft.VisualStudio.Workload.NativeDesktop" -Wait -NoNewWindow
-    
-    $vsExitCode = $LASTEXITCODE
-    
-    if ($vsExitCode -eq 0 -or $vsExitCode -eq 3010) {
-        Write-Host "Visual Studio 2022 Community installation completed successfully! (Exit code: $vsExitCode)" -ForegroundColor Green
-        "Visual Studio 2022 Community installation completed successfully with exit code: $vsExitCode at $(Get-Date)" | Out-File -FilePath $logFile -Append
-    } else {
-        Write-Host "Visual Studio installation may have encountered issues. Exit code: $vsExitCode" -ForegroundColor Red
-        "Visual Studio installation encountered issues. Exit code: $vsExitCode at $(Get-Date)" | Out-File -FilePath $logFile -Append
-    }
-}
-catch {
-    $errorMessage = "Error during Visual Studio installation: $_"
-    Write-Host $errorMessage -ForegroundColor Red
-    $errorMessage | Out-File -FilePath $logFile -Append
-}
-
 # Install PowerShell Core
 Write-Host "`nStarting PowerShell Core installation process..." -ForegroundColor Cyan
 "Starting PowerShell Core installation at $(Get-Date)" | Out-File -FilePath $logFile -Append
@@ -131,6 +86,51 @@ try {
 }
 catch {
     $errorMessage = "Error during Az PowerShell modules installation: $_"
+    Write-Host $errorMessage -ForegroundColor Red
+    $errorMessage | Out-File -FilePath $logFile -Append
+}
+
+# Install Visual Studio 2022 Community
+Write-Host "Starting Visual Studio 2022 Community installation process..." -ForegroundColor Cyan
+"Starting Visual Studio 2022 Community installation at $(Get-Date)" | Out-File -FilePath $logFile -Append
+
+$vsInstallerPath = "$tempDir\vs_community.exe"
+$vsDownloadUrl = "https://aka.ms/vs/17/release/vs_community.exe"
+Write-Host "Downloading Visual Studio 2022 Community installer..." -ForegroundColor Cyan
+
+try {
+    $webClient.DownloadFile($vsDownloadUrl, $vsInstallerPath)
+    "Visual Studio installer downloaded successfully at $(Get-Date)" | Out-File -FilePath $logFile -Append
+} 
+catch {
+    $errorMessage = "Failed to download Visual Studio installer: $_"
+    Write-Host $errorMessage -ForegroundColor Red
+    $errorMessage | Out-File -FilePath $logFile -Append
+    exit 1
+}
+
+Write-Host "Installing Visual Studio 2022 Community with requested workloads..." -ForegroundColor Yellow
+Write-Host "This may take some time. Please wait..." -ForegroundColor Yellow
+
+try {
+    Start-Process -FilePath $vsInstallerPath -ArgumentList "--quiet", "--norestart", "--wait", `
+                                                        "--add Microsoft.VisualStudio.Workload.NetWeb", `
+                                                        "--add Microsoft.VisualStudio.Workload.Node", `
+                                                        "--add Microsoft.VisualStudio.Workload.ManagedDesktop", `
+                                                        "--add Microsoft.VisualStudio.Workload.NativeDesktop" -Wait -NoNewWindow
+    
+    $vsExitCode = $LASTEXITCODE
+    
+    if ($vsExitCode -eq 0 -or $vsExitCode -eq 3010) {
+        Write-Host "Visual Studio 2022 Community installation completed successfully! (Exit code: $vsExitCode)" -ForegroundColor Green
+        "Visual Studio 2022 Community installation completed successfully with exit code: $vsExitCode at $(Get-Date)" | Out-File -FilePath $logFile -Append
+    } else {
+        Write-Host "Visual Studio installation may have encountered issues. Exit code: $vsExitCode" -ForegroundColor Red
+        "Visual Studio installation encountered issues. Exit code: $vsExitCode at $(Get-Date)" | Out-File -FilePath $logFile -Append
+    }
+}
+catch {
+    $errorMessage = "Error during Visual Studio installation: $_"
     Write-Host $errorMessage -ForegroundColor Red
     $errorMessage | Out-File -FilePath $logFile -Append
 }
